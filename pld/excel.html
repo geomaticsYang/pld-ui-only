@@ -1,0 +1,331 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜单</title>
+
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/rangeslider.css">
+<link rel="stylesheet" href="css/style2.css" media="screen" type="text/css" />
+<link rel="stylesheet" href="css/simple.switch.three.css" type="text/css">
+<link rel="stylesheet" href="css/bootstrap.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/accordion.js"></script>
+
+<style>
+html,body {height:100%;margin:0;background:#fff;}
+ul{list-style:none;}
+.menu{width:240px; margin:0;background:#f0f0f0}
+.nav {width: 240px; padding: 40px 28px 25px 0; font-family: "Microsoft yahei", Arial, Helvetica, sans-serif;} 
+ul.nav {padding: 0; margin:0; font-size: 1em; line-height: 0.5em; list-style: none;} 
+ul.nav li {width: 100%;display: block;float: left;position: relative;} 
+ul.nav li a {line-height: 10px;  padding: 11px 40px; display: block; text-decoration: none; font-weight: bolder;color:#fff; }
+.menu_li{ background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6c6e74), color-stop(100%,#4b4d51));color:#fff;font: bold 12px/32px Arial, sans-serif;border-bottom: solid 1px #3b424d;}
+
+ul.nav li a:hover {background-color:#675C7C;    color:#fff;}
+ul.nav ul { margin: 0; padding: 0;display: none;} 
+ul.nav ul li { margin: 0; padding: 0; clear: both;} 
+ul.nav ul li a { padding-left: 40px; font-size: 12px; font-weight: normal; border-bottom: 1px solid #c9c9c9; color:#393D49;font: bold 10px Arial, sans-serif;}
+ul.nav ul li a:hover {background-color:#D3C99C; color:#675C7C;} 
+ul.nav ul ul li a {color:silver; padding-left: 40px;} 
+ul.nav ul ul li a:hover { background-color:#D3CEB8; color:#675C7C;} 
+ul.nav span{float:right;right: 22px;position: absolute;}
+ul.nav ul li em {
+	position: absolute;
+	top: 0px;
+	left: 10px;
+	margin-left: 10px;
+	color: #a6a6a6;
+	font: normal 10px/36px Arial, sans-serif;
+}
+.submenu-indicator {
+	float: right;
+	right: 22px;
+	position: absolute;
+	font-size: 16px;
+	-webkit-transition:all 0.5s; 
+	-moz-transition:all 0.5s; 
+	-o-transition:all 0.5s; 
+}
+.submenu-indicator-minus{
+	font-size: 16px;
+	-ms-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+
+}
+.switch_f{margin:0px 10px; width:220px;}
+.switch_s{margin:15px 10px 5px 10px; width:220px;}
+.rang_f{float:right;width:158px;margin-top:20px;}
+.rang_r{float:right;width:158px;}
+.f_title{font-size:12px;font-weight:bold;margin-bottom:0px;}
+.rang_title{width:80px;font-size:12px;font-weight:bold;}
+.tip_title{font-size:12px;font-weight:bold;margin-top:20px;}
+.styled-select select {
+   background: #6c6e74 0px 0px;
+   color: #ffffff;
+   font-size: 14px;
+   border: #000000 1px solid;
+   padding: 5px;
+   width: 220px;
+   margin-top:15px;
+   height: 28px; 
+}
+
+  .exceltable
+	{	
+		width:556px;
+		color:#000;
+		font-size:9px;
+		line-height:18px;
+		margin-bottom:8px;
+		border:1px solid #6c6e74;
+		border-collapse: collapse;
+ } 
+ .exceltable td{
+	 border-left:1px solid #6c6e74;
+	 border-top:1px solid #6c6e74;
+	 padding-left:8px;
+	 min-width:80px;
+ }
+ 
+ .inputnum{
+ margin:0;
+ 
+ }
+ 
+input[type="text"]{
+	margin-left:0px;
+	margin-top:0px;
+	padding:4px 0px;
+	width:70px;
+	height:20px;
+	border:none;
+	outline:none;
+	}
+
+
+	#tit span {float: left; padding:0;margin:0px 3px;background: -webkit-linear-gradient(#666, #555);color: #eee;border-radius: 5px 5px 0 0;border-top:1px solid #6c6e74;border-left:1px solid #6c6e74;border-right:1px solid #6c6e74;border-bottom:0px solid #6c6e74;font: italic 1em cambria;padding: 5px 8px 0px 8px;}
+	#con ul{display:none;padding:0;margin:0}
+	#tit span.select {float: left;background:#fff;color: #333;padding: 5px 8px 0px 8px;margin:0;margin:0px 0px;}
+	#con ul.show {display: block;padding:0;margin:}
+	
+.upload{
+background-color:#fff;
+margin:0;
+padding:0;
+border:0px;
+
+}
+</style>
+</head>
+
+<body>
+    <div style="margin:0px 20px; text-align:left;">
+	<span style="font:bold 12px/32px Arial, sans-serif;"> Basic Parameters</span>
+	<table class="exceltable">
+	<tr>
+      <td colspan="3">Height of Floor</td>
+      <td colspan="2" rowspan="2">Max. Building Height</td>
+      <td rowspan="2">Concession</td>
+    </tr>
+    <tr>
+      <td>Domestic</td>
+      <td>Lobby</td>
+      <td>Refuge</td>
+    </tr>
+    <tr>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><button type="button" style="margin:0">Get from OZP</button></td>
+      <td>&nbsp;</td>
+    </tr>
+	</table>	
+		
+	
+	<div id="tit" style="margin:10px 0px 0px 0px;height:25px;">
+	<span class="select" >Domestics</span>
+	<span >Non-Domestics</span>
+	<span >Others</span>
+	</div>
+	
+	<div id="con">
+	<ul class="show">
+	<table  class="exceltable"  style="margin:0px 0px;">
+	<tr>
+      <td rowspan="2">Tower Type</td>
+      <td colspan="5" style="padding-left:170px;">Number Of</td>
+      <td rowspan="2">Building Height</td>
+      <td rowspan="2">Footprint Size</td>
+      <td rowspan="2">Add to map</td>
+    </tr>
+    <tr>
+      <td>Tower</td>
+      <td>Flat/Fl.</td>
+      <td>Domestic Fl.</td>
+      <td>Lobby Fl.</td>
+      <td>Refuge Fl.</td>
+    </tr>
+    <tr>
+      <td>Type1</td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td align="middle" style="padding:0;"><button type="button" class="upload"><img src="images/upload.png"></button></td>
+    </tr>
+    <tr>
+      <td>Type2</td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+	  <td align="middle" style="padding:0;border-top:0px;"><button type="button" class="upload"><img src="images/upload.png"></button></td>
+    </tr>
+    <tr>
+      <td>Type3</td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+	  <td align="middle" style="padding:0;border-top:0px;"><button type="button" class="upload"><img src="images/upload.png"></button></td>
+    </tr>
+	</table>
+	</ul>
+	<ul>
+	<table  class="exceltable"  style="margin:0px 0px;">
+	<tr>
+      <td rowspan="2">Tower Type</td>
+      <td colspan="4" style="padding-left:170px;">Number Of</td>
+      <td rowspan="2">Building Height</td>
+      <td rowspan="2">Footprint Size</td>
+      <td rowspan="2">Add to map</td>
+    </tr>
+    <tr>
+      <td>Tower</td>
+      <td>Non-Domestic Fl.</td>
+      <td>Lobby Fl.</td>
+      <td>Refuge Fl.</td>
+    </tr>
+    <tr>
+      <td>Type1</td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td> 
+      <td align="middle" style="padding:0;"><button type="button" class="upload"><img src="images/upload.png"></button></td>
+    </tr>
+    <tr>
+      <td>Type2</td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+	  <td align="middle" style="padding:0;border-top:0px;"><button type="button" class="upload"><img src="images/upload.png"></button></td>
+    </tr>
+    <tr>
+      <td>Type3</td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td><input type="text" ></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+	  <td align="middle" style="padding:0;border-top:0px;"><button type="button" class="upload"><img src="images/upload.png"></button></td>
+    </tr>
+	</table>
+	</ul>
+	<ul>
+	<table  class="exceltable"  style="margin:0px 0px;">
+	<tr>
+      <td rowspan="2">Tower Type</td>
+      <td colspan="4" style="padding-left:170px;">Number Of</td>
+      <td rowspan="2">Building Height</td>
+      <td rowspan="2">Footprint Size</td>
+      <td rowspan="2">Add to map</td>
+    </tr>
+    <tr>
+      <td>Tower</td>
+      <td>Non-Domestic Fl.</td>
+      <td>Lobby Fl.</td>
+      <td>Refuge Fl.</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td> 
+      <td rowspan="3">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+	</table>
+	</ul>
+	
+	</div>
+	
+	
+	<span style="font:bold 12px/32px Arial, sans-serif;"> Summary</span>
+	<table class="exceltable">
+	<tr>
+      <td >Proposed GFA</td>
+      <td >Total No.of Flat</td>
+      <td ><button type="button" style="margin:0">Save option</button></td>
+	  <td ></td>
+     
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+	</table>	
+   </div>
+<script>
+
+        $('#tit span').click(function() {
+            var i = $(this).index();//下标第一种写法
+            //var i = $('tit').index(this);//下标第二种写法
+            $(this).addClass('select').siblings().removeClass('select');
+            $('#con ul').eq(i).show().siblings().hide();
+        });
+		
+		    </script>
+</body>
+</html>

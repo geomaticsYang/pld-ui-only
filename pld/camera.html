@@ -1,0 +1,236 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜单</title>
+
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/rangeslider.css">
+
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+<link rel="stylesheet" href="css/jquery-labelauty.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="css/lby-main.css" type="text/css" media="screen" charset="utf-8" />
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<style>
+html,body {height:100%;margin:0;font-size:12px;margin-bottom:0px;}
+.select_box{font-family: "宋体"; font-size: 12px;color: #999999;width: 178px;line-height: 20px;margin: 50px auto;}
+.select_showbox{border: 1px solid #b0a296;height:25px;width:100px;padding-left: 5px;}
+input[type="radio"]:checked{
+    width: 20px;
+    height: 20px;
+	color: red;
+}
+
+</style>
+</head>
+
+<body>
+    <div style="margin-left:10px;">
+		<table style="width:200px;font-weight:bold;">
+			<tr><td><img src="" style="vertical-align:middle;"><font style="line-height:40px;margin-left:5px;font-size:14px;">Scene Mode</font></td></tr>
+			<tr><td>
+			<div style="margin-bottom:0px;padding-left:10px;">
+			<select name="selectSceneMode" id="selectSceneMode" class="select_showbox">
+				<option value="3D" selected>3D</option>
+				<option value="2D">2D</option>
+			</select>
+			</div>
+			</td></tr>
+		</table>
+		
+		<div id="2DPanel" style="display:none;">
+			<table style="width:200px;font-weight:bold;">
+				<tr><td colspan="3" ><img src="images/position.png" style="vertical-align:middle;"><font style="line-height:40px;margin-left:5px;font-size:14px;">Position</font></td></tr>
+				<tr><td style="width:20%" align="center">X</td><td colspan="3"><input id="numX2D" type="number" style="margin:0px 5px 0px 0px;height:20px;width:100px;">m</td><td></td></tr>
+				<tr><td align="center">Y</td><td colspan="3"><input id="numY2D" type="number" style="margin:0px 5px 0px 0px;height:20px;width:100px;">m</td><td></td></tr>
+			</table>
+			
+			<table style="margin-top:10px;">
+				<tr>
+					<td>
+						<input id="btnZoomto2D" type="submit" class="button" style="background-color:#fff;margin:0px;padding:0px 10px 0px 25px;width:125px;height:30px;font-size:10px;color:#000;background-image:url(images/pick.png);background-repeat:no-repeat;background-position:center left;border:1px solid #333" id="create"  value="Zoom to location" >
+					</td>
+				</tr>
+			</table>
+			
+			<table style="width:200px;font-weight:bold;">
+				<tr><td><img src="" style="vertical-align:middle;"><font style="line-height:40px;margin-left:5px;font-size:14px;">Map Scale</font></td></tr>
+				<tr><td>
+				<div style="margin-bottom:0px;padding-left:10px;">
+					<select name="selectSetScale2D" id="selectSetScale2D" class="select_showbox" style="width:120px;">
+						<option value="-1" selected>Select map scale</option>
+						<option value="1000">1:1000</option>
+						<option value="2500">1:2500</option>
+						<option value="5000">1:5000</option>
+						<option value="20000">1:20000</option>
+						<option value="50000">1:50000</option>
+					</select>
+				</div>
+				</td></tr>
+			</table>
+		</div>
+		
+		<div id="3DPanel">
+			<table style="width:200px;font-weight:bold;">
+			<tr><td colspan="3" ><img src="images/position.png" style="vertical-align:middle;"><font style="line-height:40px;margin-left:5px;font-size:14px;">Position</font></td></tr>
+			<tr><td style="width:20%"></td><td style="width:40%">Actual</td><td style="width:40%">Offset</td></tr>
+			<tr><td align="center">X</td><td colspan="3"><input id="numX" type="number" style="margin:0px 5px 0px 0px;height:20px;width:100px;">m</td><td></td></tr>
+			<tr><td align="center">Y</td><td colspan="3"><input id="numY" type="number" style="margin:0px 5px 0px 0px;height:20px;width:100px;">m</td><td></td></tr>
+			<tr><td align="center">Z</td><td><input id="numZ" type="number" style="margin:0px 5px 0px 0px;height:20px;width:50px;">m</td><td><input id="numOffset" type="number" style="margin:0px 5px 0px 0px;height:20px;width:50px;">m</td></tr>
+			</table>
+			
+			<table style="margin-top:10px;">
+			<tr>
+			<td>
+			<input id="btnClickFly" type="submit" class="button" style="background-color:#fff;margin:0px;padding:0px 10px 0px 25px;width:105px;height:30px;font-size:10px;color:#000;background-image:url(images/pick.png);background-repeat:no-repeat;background-position:center left;border:1px solid #333" id="create"  value="Pick point & fly" >
+			</td>
+			<td>
+			<input id="btnFlyTo" type="submit" class="button" style="background-color:#fff;margin:0px;padding:0px 10px 0px 25px;width:115px;height:30px;font-size:10px;color:#000;background-image:url(images/fly.png);background-repeat:no-repeat;background-position:center left;border:1px solid #333" id="create"  value="Fly to coordinate" >
+			</td>
+			</tr>
+			</table>
+			<table style="width:200px;font-weight:bold;">
+			<tr><td ><img src="images/direction.png" style="vertical-align:middle;"><font style="line-height:40px;margin-left:5px;font-size:14px;">Angle and Direction</font></td></tr>
+			<tr><td >
+			<div style="margin-bottom:10px;padding-left:10px;">
+			<font style="">Tilting Angle</font><output></output>
+			<input id="rangePitch" type="range" min="-90" max="90" value="0" data-rangeslider data-orientation="pitch"> 
+			<input id="numPitch" type="number" value="0" class="numTranspValue" >
+			</div>
+			</td></tr>
+			<tr><td >
+			<div style="margin-bottom:10px;padding-left:10px;">
+			<font >Heading Direction</font><output></output>
+			<input id="rangeHeading" type="range" min="0" max="360" value="0" data-rangeslider data-orientation="heading"> 
+			<input id="numHeading" type="number" value="0" class="numTranspValue">
+			</div>
+			</td></tr>
+			</table>
+			
+			
+			<table style="width:200px;font-weight:bold;">
+			<tr><td ><img src="images/eyes.png" style="vertical-align:middle;"><font style="line-height:40px;margin-left:5px;font-size:14px;">Field of View (deg)</font></td></tr>
+			<tr><td >
+			<div style="margin-bottom:0px;padding-left:10px;">
+			<select name="choose" id="choose" class="select_showbox">
+			<option value="15">15</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="45" selected>45</option>
+			<option value="60">60</option>
+			<option value="80">80</option>
+			<option value="100">100</option>
+			<option value="120">120</option>
+			</select>
+			</div>
+			</td></tr>
+			</table>
+			
+			<table style="width:200px;">
+			<tr><td ><img src="images/viewing.png" style="vertical-align:middle;"><font style="line-height:40px;margin-left:5px;font-size:14px;font-weight:bold;">Viewing Mode</font></td></tr>
+			<tr><td >
+			<div id="lby-demo" style="margin-top:5px">
+			<ul id="lby-radio-demo">
+			<li>
+				<input id="optionFly" class="to-labelauty" type="radio" name="rd1" data-labelauty="Orbit Mode(Fly)" checked/>
+			</li>
+			<li>
+				<input id="optionWalk" class="to-labelauty" type="radio" name="rd1" data-labelauty="First Person View(Walk)"/>
+			</li>
+			<li>
+				<input id="option360" class="to-labelauty" type="radio" name="rd1" data-labelauty="360 View"/>
+			</li>
+			</ul>
+			</div>
+			</td></tr>
+			</table>
+			
+		<button style="background-color:#fff;float:left;margin:5px 5px;padding:0px 10px 0px 25px;width:80px;height:50px;font-size:12px;font-weight:bold;color:#000;background-image:url(images/home.png);background-repeat:no-repeat;background-position:center left;border:1px solid #333;border-radius: 4px;" id="create">Set as <br/>Home</button>
+		<button style="background-color:#fff;float:left;margin:5px 10px;padding: 0px 0px 0px 15px;width:118px;height:50px;font-size:12px;font-weight:bold;color:#000;background-image:url(images/street.png);background-repeat:no-repeat;background-position:center left;border:1px solid #333;border-radius: 4px;" id="btnStreetView">Enter Google<br/>StreetView</button>
+		
+	   </div>
+	</div>
+
+<script type="text/javascript" src="js/simple.switch.js"></script>
+<script src="js/rangeslider.min.js"></script>
+<script type="text/javascript" src="js/jquery-labelauty.js"></script>
+<script>
+		$(document).ready(function(){
+			$(".to-labelauty").labelauty({ minimum_width: "170px" });
+			$(".to-labelauty-icon").labelauty({ label: false });
+		});
+
+    $(function() {
+		var $document   = $(document);
+        var selector    = '[data-rangeslider]';
+        var $inputRange = $(selector);
+
+        // Example functionality to demonstrate a value feedback
+        // and change the output's value.
+        function valueOutput(element) {
+            var value = element.value;
+            var output = $(element).parent().find('.numTranspValue');
+
+            output.val(Number(value).toFixed(0));
+			
+			var orientation = $(element).attr('data-orientation');
+        }
+
+        // Initial value output
+        for (var i = $inputRange.length - 1; i >= 0; i--) {
+            valueOutput($inputRange[i]);
+        };
+
+        // Update value output
+        $document.on('input', selector, function(e) {
+            valueOutput(e.target);
+        });
+
+        // Initialize the elements
+        $inputRange.rangeslider({
+            polyfill: false
+        });
+		
+		$('#button1').bind('keypress', function (e) {
+            if (e.keyCode == "13") {
+			var $inputRange = $('input[type="range"]', e.target.parentNode);
+            var value = $('input[type="number"]', e.target.parentNode)[0].value;
+
+            $inputRange
+                .val(value)
+                .change();
+			  }
+        });
+		
+		$('.numTranspValue').keyup(syncInputSlideTransp);
+		$('.numTranspValue').change(syncInputSlideTransp);
+    });
+	
+	function syncInputSlideTransp(dom) {
+		var $thisDom;
+		if(dom instanceof $.Event)
+			$thisDom = $(this);
+		else
+			$thisDom = dom;
+		
+		var val = $thisDom.val();
+		var inputs = $thisDom.parent().find('input');
+		
+		for(var i=0; i<inputs.length; i++)
+		{
+			if($(inputs[i]).attr('type')=='range')
+			{
+				if($.isNumeric(val))
+				{
+					$(inputs[i]).val(val).change();
+				}
+				break;
+			}
+		}
+	};
+</script>
+
+
+</body>
+</html>

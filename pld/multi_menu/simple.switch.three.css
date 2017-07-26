@@ -1,0 +1,95 @@
+﻿
+* {
+    box-sizing: border-box !important;
+}
+
+.Switch, .Switch * {
+    -webkit-transition-property: all;
+    -moz-transition-property: all;
+    -o-transition-property: all;
+    transition-property: all;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -webkit-transition-delay: 0s;
+    -moz-transition-delay: 0s;
+    -o-transition-delay: 0s;
+    transition-delay: 0s;
+}
+
+
+
+
+/* FlatCircular */
+.Switch_FlatCircular {
+    position: relative;
+    width: 50px;
+    height: 15px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #c2c2c2;
+    border-radius: 20px;
+	margin-right:10px;
+	margin-top:20px;
+}
+
+.Switch_FlatCircular .SwitchLine:before {
+    position: absolute;
+    
+	font-size:8px;
+    color: #fff;
+    left: 18px;
+    top: 2px;
+}
+
+.Switch_FlatCircular .SwitchLine:after {
+    position: absolute;
+   
+	font-size:8px;
+    color: #fff;
+    left: 2px;
+    top: 2px;
+}
+
+.Switch_FlatCircular .SwitchButton {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 0px;
+    top: 0px;
+    z-index: 2;
+    background-color: #fff;
+    border-radius: 45px;
+    border: 1px solid #c2c2c2;
+}
+
+.Switch_FlatCircular.On {
+    background-color: #5FB878;
+}
+
+.Switch_FlatCircular.On .SwitchLine {
+}
+
+.Switch_FlatCircular.On .SwitchButton {
+    border: 1px solid #5FB878;
+    left: 35px;
+}
+
+.Switch_FlatCircular.On .SwitchButton:after, .Switch_FlatCircular.On .SwitchButton:before {
+    background-color: #5FB878;
+}
+
+.Switch_FlatCircular.Disabled {
+    opacity: 0.3;
+}
+
+.Switch_FlatCircular.Disabled .SwitchButton {
+    /*opacity:0.5;*/
+}
+
+.Switch_FlatCircular.On.Disabled .SwitchLine {
+    /*opacity:0.5;*/
+}
+

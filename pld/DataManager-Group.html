@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜单</title>
+
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/rangeslider.css">
+<link rel="stylesheet" href="css/style2.css" media="screen" type="text/css" />
+<link rel="stylesheet" href="css/simple.switch.three.css" type="text/css">
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="3dgis/dist/js/bootstrap.js"></script>
+<script type="text/javascript" src="js/accordion.js"></script>
+<script type="text/javascript">
+$(function(){
+   $(".nav").accordion({
+        //accordion: true,
+        speed: 500,
+	    closedSign: '<span class=\'submenu-indicator\'>+</span>',
+		openedSign: '<span class=\'submenu-indicator-minus\'>+</span>'
+	});
+}); 
+</script>
+<style>
+html,body {height:100%;margin:0}
+ul{list-style:none;}
+.menu{width:240px; margin:0;background:#f0f0f0}
+.nav {width: 240px; padding: 40px 28px 25px 0; font-family: "Microsoft yahei", Arial, Helvetica, sans-serif;} 
+ul.nav {padding: 0; margin:0; font-size: 1em; line-height: 0.5em; list-style: none;} 
+ul.nav li {width: 100%;display: block;float: left;position: relative;} 
+ul.nav li a {line-height: 10px;  padding: 11px 40px; display: block; text-decoration: none; font-weight: bolder;color:#fff; }
+.menu_li{ background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6c6e74), color-stop(100%,#4b4d51));color:#fff;font: bold 12px/32px Arial, sans-serif;border-bottom: solid 1px #3b424d;}
+
+ul.nav li a:hover {background-color:#675C7C;    color:#fff;}
+ul.nav ul { margin: 0; padding: 0;display: none;} 
+ul.nav ul li { margin: 0; padding: 0; clear: both;} 
+ul.nav ul li a { padding-left: 40px; font-size: 12px; font-weight: normal; border-bottom: 1px solid #c9c9c9; color:#393D49;font: bold 10px Arial, sans-serif;}
+ul.nav ul li a:hover {background-color:#D3C99C; color:#675C7C;} 
+ul.nav ul ul li a {color:silver; padding-left: 40px;} 
+ul.nav ul ul li a:hover { background-color:#D3CEB8; color:#675C7C;} 
+ul.nav span{float:right;right: 22px;position: absolute;}
+ul.nav ul li em {
+	position: absolute;
+	top: 0px;
+	left: 10px;
+	margin-left: 10px;
+	color: #a6a6a6;
+	font: normal 10px/36px Arial, sans-serif;
+}
+.submenu-indicator {
+	float: right;
+	right: 22px;
+	position: absolute;
+	font-size: 16px;
+	-webkit-transition:all 0.5s; 
+	-moz-transition:all 0.5s; 
+	-o-transition:all 0.5s; 
+}
+.submenu-indicator-minus{
+	font-size: 16px;
+	-ms-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+
+}
+.switch_f{margin:0px 10px; width:220px;}
+.switch_s{margin:15px 10px 5px 10px; width:220px;}
+.rang_f{float:right;width:158px;margin-top:20px;}
+.rang_r{float:right;width:180px;}
+.f_title{font-size:12px;font-weight:bold;margin-bottom:0px;}
+.rang_title{width:80px;font-size:12px;font-weight:bold;}
+.tip_title{font-size:12px;font-weight:bold;margin-top:20px;}
+.styled-select select {
+   background: #6c6e74 0px 0px;
+   color: #ffffff;
+   font-size: 14px;
+   border: #000000 1px solid;
+   padding: 5px;
+   width: 220px;
+   margin-top:15px;
+   height: 28px; 
+}
+hr {margin:10px;}
+.toolset {
+	height:24px;
+	width:220px;
+	margin-left:10px;
+}
+.listTool {
+	color: black !important;
+}
+.toolItem {
+	text-align:center;
+	margin-top:7px;
+}
+.toolImage {
+	width:40px;
+	height:40px;
+	margin-bottom:7px;
+}
+.toolClick {
+	cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+    <div class="menu">
+		<ul class="nav">
+			<li><a href="#" class="menu_li">3D Analysis</a>
+				<ul style="height:150px; text-align: center;">
+					<div class="row" style="width:250px; text-align:center; position:relative; left:10px;">
+						<div class="col-md-6 col-xs-6 toolItem" id="btnViewshed">
+							<img src="images/Viewshed.png" class="toolImage toolClick"></img>
+							<p class="toolClick">Viewshed</p>
+						</div>
+						<div class="col-md-6 col-xs-6 toolItem" id="btnSightline">
+							<img src="images/Sightline.png" class="toolImage toolClick"></img>
+							<p class="toolClick">Sightline</p>
+						</div>
+						<div class="col-md-6 col-xs-6 toolItem" id="btnProfile">
+							<img src="images/Profile.png" class="toolImage toolClick"></img>
+							<p class="toolClick">Profile</p>
+						</div>
+						<div class="col-md-6 col-xs-6 toolItem" id="btnMontage">
+							<img src="images/camera.png" class="toolImage toolClick"></img>
+							<p class="toolClick">Montage</p>
+						</div>
+					</div>
+				</ul>
+			</li>
+			<li><a href="#" class="menu_li">Spacial Query</a>
+				<ul style="height:75px; text-align: center;">
+					<div class="row" style="width:250px; text-align:center; position:relative; left:10px;">
+						<div class="col-md-6 toolItem" id="btnBuffer">
+							<img src="images/Buffer.png" class="toolImage toolClick"></img>
+							<p class="toolClick">Buffer</p>
+						</div>
+					</div>
+				</ul>
+			</li>
+		</ul>
+   </div>
+
+<script type="text/javascript" src="js/simple.switch.js"></script>
+<script src="js/rangeslider.min.js"></script>
+<script>
+	function toggle(targetid){
+		var target = $('#'+targetid);
+		if(target.length==0)
+			return;
+		else
+		{
+			if (target.css('display')=='block'){
+				target.css('display','none');
+			} 
+			else {
+				var layerGroups = $('.layerGroup');
+				for(var i=0; i<layerGroups.length; i++)
+				{
+					var jElem = $($('.layerGroup')[i]);
+					var id = jElem.attr('id');
+					if(id==targetid)
+						jElem.css('display','block');
+					else
+						jElem.css('display','none');
+				}
+			}
+		}
+	}
+	
+	function hide(targetid){
+		$('#'+targetid).css('display','none');
+	}
+
+    $(document).ready(function(){
+
+	});
+</script>
+</body>
+</html>

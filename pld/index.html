@@ -1,0 +1,2073 @@
+
+
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />     
+	<link rel="stylesheet" href="css/templatemo_main.css">
+	<link rel="stylesheet" href="3dgis/lib/font-awesome/css/font-awesome.min.css"/>
+	<!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/pretty.css">
+	<link rel="stylesheet" href="3dgis/lib/bootstrap-table/dist/bootstrap-table.css">
+	<link rel="stylesheet" href="3dgis/lib/select2/css/select2.min.css">
+	<link rel="stylesheet" href="3dgis/lib/bootstrap-slider/css/bootstrap-slider.css">
+  
+	<link href="../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+	<style>
+		html, body, #cesiumContainer, #streetViewContainer, #SMapContainer, #panoContainer {
+            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+        }
+		
+		#cesiumContainer {
+			position: absolute;
+			display: block;
+		}
+		
+		#streetViewContainer, #SMapContainer {
+			z-index: 1050;
+			display: none;
+			position: absolute;
+		}
+		
+		#panoContainer {
+			z-index: 1051;
+			display: none;
+			position: absolute;
+			pointer-events:none;
+		}
+		
+		.leftIcon {
+			margin-top: 10px;
+			margin-left: 7px;
+			color: white;
+		}
+		
+		#leftPanel {
+			position:absolute;
+			width: 50px;
+			left: 0px;
+			top: 0px;
+			z-index:1000 !important;
+			background-color:#263238;
+		}
+		
+		#leftIconList {
+			position: relative;
+			/*top: 100px;*/
+		}
+		
+		a, li, h4 {
+			font-family: Arial, Helvetica, sans-serif !important;
+		}
+		
+		#upperDiv {
+			top: 0px;
+			left: 0px;
+			width: 100%;
+		}
+		
+		#bottomDiv {
+			position: absolute;
+			bottom: 0px;
+			left: 0px;
+			width: 100%;
+			z-index: 1000;
+		}
+		
+		.bottom-info {
+			opacity: 1 !important;
+			color: #000 !important;
+			background-color: #EEE !important;
+			cursor: default !important;
+			margin-left: 1%;
+			margin-bottom: 5px;
+			height: 25px;
+			float:left;
+		}
+		
+		.rightToolContainer {
+			background-color: rgba(200, 200, 200, 0.7);
+			width: 36px;
+			height: 36px;
+			text-align: center;
+			margin-bottom: 2px;
+			border-radius: 5px;
+			padding-top:3px;
+		}
+		
+		.toolsetPanel {
+			background-color: rgba(0, 0, 0, 0) !important;
+			border: 0px !important;
+			color: #00f8fc;
+		}
+		
+		.toolsetItem3D {
+			cursor: pointer;
+			color: black;
+		}
+		
+		.toolsetItem2D {
+			cursor: pointer;
+			color: purple;
+		}
+		
+		/* Hide modal backdrop to make background displayable */
+		.modal {
+			overflow: hidden;
+			bottom:initial! important;
+		}
+		.modal-backdrop {
+			display: none !important;
+			pointer-events: none;
+		}
+		
+		.movable {
+			-webkit-user-select: none; /* Chrome/Safari */        
+			-moz-user-select: none; /* Firefox */
+			-ms-user-select: none; /* IE10+ */
+		}
+		
+		th {
+			background-color: #eeeeee;
+		}
+
+		.cesium-widget-credits {
+			display: none !important;
+		}
+		
+		#ex1Slider .slider-selection {
+			background: #BABABA;
+		}
+		
+		a {
+			cursor: pointer;
+		}
+		
+		.disabled {
+			cursor: not-allowed;
+		}
+		
+		.tempHidden {
+			display: none !important;
+		}
+		
+		.imgIconRight{
+			width: 35px;
+			height: 35px;
+		}
+		
+		.leftBtn {
+			color: white;
+		}
+		
+		.spanBtn {
+			cursor: pointer;
+		}
+		
+		#layerUserProfile>div {
+			margin-left:5px;
+		}
+		
+		.profileLinks {
+			margin-top:12px;
+			margin-bottom:12px;
+		}
+		
+		.bookmarkItem:hover {
+			background-color: rgb(200,200,200);
+		}
+	</style>
+	
+	<script src="js/jquery.min.js"></script>
+	<script src="3dgis/dist/js/bootstrap.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/templatemo_script.js"></script>
+	<script src="js/layer/layer.js"></script>
+	
+	<!-- Bootstrap table plugin javascripts -->
+	<script src="3dgis/lib/bootstrap-table/dist/bootstrap-table.js"></script>
+	<script src="3dgis/lib/bootstrap-slider/bootstrap-slider.min.js"></script>
+	<script src="3dgis/lib/select2/js/select2.min.js"></script>
+	<script src="3dgis/lib/bootstrap-table/dist/extensions/select2-filter/bootstrap-table-select2-filter.js"></script>
+	<script src="3dgis/lib/bootstrap-table/dist/extensions/export/bootstrap-table-export.js"></script>
+	<script src="3dgis/lib/bootstrap-table/dist/tableExport.js"></script>
+</head>
+<body>
+
+	<!-- 3D GIS Original -->
+	<div id="3dgis" style="display:none;">	<!-- Not useful. Delete this should be okay -->
+		<div id="upperDiv">
+			<div id="leftPanel">
+				<button type="button" class="navbar-toggle leftBtn" id="btnLayerManager" data-toggle="sidebar" data-target=".sidebar-left"
+					style="display:none;">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				
+				<button type="button" class="btn btn-primary" id="btnAttributeTable" data-toggle="modal" data-target="#dialogModal" data-backdrop="static" data-keyboard="false" style="display:none;">
+					This button shows attribute table
+				</button>
+				<button type="button" class="btn btn-primary" id="btnFlyToTrigger" data-toggle="modal" data-target="#flyToModal" data-backdrop="static" data-keyboard="false" style="display:none;">
+					This button shows fly to modal
+				</button>
+				<button type="button" class="btn btn-primary" id="btnTranspTrigger2D" data-toggle="modal" data-target="#transpModal2D" data-backdrop="static" data-keyboard="false" style="display:none;">
+					This button shows transparency control for 2D
+				</button>
+				<button type="button" class="btn btn-primary" id="btnLayerReorder" data-toggle="modal" data-target="#reorderModal" data-backdrop="static" data-keyboard="false" style="display:none;">
+					This button shows layer reorder control for 2D
+				</button>
+				<button type="button" class="btn btn-primary" id="btnZoomTo" data-toggle="modal" data-target="#zoomToModal" data-backdrop="static" data-keyboard="false" style="display:none;">
+					This button shows zoom to control for 2D
+				</button>
+				
+				<div id="leftIconList">
+					<i class="fa fa-list fa-2x leftIcon" data-toggle="sidebar" aria-hidden="true" id="iconLayerManager"></i>
+				</div>
+				
+				<div>
+					<i class="fa fa-table fa-2x leftIcon" aria-hidden="true" id="iconAttributeTable"></i>
+				</div>
+			</div>
+		  
+			<!-- Begin page content -->
+			<!-- <div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-5 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate">
+						<div class="panel-group" id="accordion">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapseEditing">Edit blocks</a>
+									</h4>
+								</div>
+								<div id="collapseEditing" class="panel-collapse collapse">
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> -->
+		</div>
+	</div>
+
+    <div class="template-page-wrapper" style="position:absolute;top:0px;bottom:30px;left:0px;right:0px;z-index:100;">
+		<div class="navbar-collapse templatemo-sidebar3" >
+			<ul class="templatemo-sidebar3-menu">
+				<li><a left-index="1" href="#" title="Layer Manager" id="group1"><i class="fa fa-list-ul fa-2x leftBtn" aria-hidden="true"></i></a></li>
+				<li><a left-index="2" href="#" title="Navigation" id="leftIconNavigation"><i class="fa fa-eye fa-2x leftBtn" aria-hidden="true"></i></a></li>
+				<li><a left-index="3" href="#" title="Block Management" id="leftIconEditBlock"><i class="fa fa-database fa-2x leftBtn"></i></a></li>
+				<li><a left-index="4" href="#" title="Design Option" id="leftIconEditOption"><i class="fa fa-pencil-square-o fa-2x leftBtn" aria-hidden="true"></i></a></li>
+				
+				<li><a left-index="5" href="#" title="Analysis" id="leftIconAnalysis"><i class="fa fa-area-chart fa-2x leftBtn" aria-hidden="true"></i></a></li>
+				<li><a left-index="6" href="#" title="Bookmarks" id="leftIconBookmarks"><i class="fa fa-bookmark fa-2x leftBtn" aria-hidden="true"></i></a></li>
+				<li><a left-index="7" href="#" title="User Settings" id="leftIconUserProfile"><i class="fa fa-user-circle-o fa-2x leftBtn" aria-hidden="true"></i></a></li>
+			</ul>
+		</div><!--/.navbar-collapse -->
+
+		<div class="templatemo-content-wrapper">
+			<div class="templatemo-content" >
+				<div id="viewContainer" style="position:relative; top:0px; left:0px; height:100%; width:100%; z-index:0; overflow:hidden;">
+					<div id="cesiumContainer" style="background-color:black;"></div>
+					<div id="SMapContainer"></div>
+					<div id="streetViewContainer"></div>
+					<div id="panoContainer"></div>
+				</div>
+				
+				<div id='loadingbar' class="spinner" style="z-index:9999999;">
+					<div class="spinner-container container1">
+						<div class="circle1"></div>
+						<div class="circle2"></div>
+						<div class="circle3"></div>
+						<div class="circle4"></div>
+					</div>
+					<div class="spinner-container container2">
+						<div class="circle1"></div>
+						<div class="circle2"></div>
+						<div class="circle3"></div>
+						<div class="circle4"></div>
+					</div>
+					<div class="spinner-container container3">
+						<div class="circle1"></div>
+						<div class="circle2"></div>
+						<div class="circle3"></div>
+						<div class="circle4"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="divSearch" class="col-xs-5 col-md-2" style="position:absolute; right:51px; bottom:280px; z-index:1002; display:none; min-width:340px; opacity:0.8;">
+			<input id="txtSearch" type="text" class="form-control input-lg" style="border-radius:5px; min-width:250px; right:0px; padding-left:40px; padding-right:40px;" placeholder="Search"></input>
+			<div id="iconSearchInfo" style="position:absolute; left:22px; top:10px;"><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></div>
+			<div id="iconSearchProceed" style="position:absolute; right:22px; top:10px; cursor:pointer;" title="Click to search"><i class="fa fa-search fa-2x" style="font-size:24px;" aria-hidden="true"></i></div>
+		</div>
+	
+		<div class="navbar-collapse templatemo-sidebar2" id="toolset3D" >
+			<ul class="templatemo-sidebar2-menu">
+				<div style="display:none;">
+					<li style="margin-top:10px;"><a href="#" id="userinfo1" title="Show user info"><i class="user"></i></a></li>
+					<li><a href="#" id="userinfo2" style="display:none;" title="Hide user info"><i class="user"></i></a></li>
+					
+					<li style="margin-top:40px !important;" class="3DOnly"><a href="#" class="rightTool3D" id="search" title="Search"><i class="search"></i></a></li>
+					<li><a href="#" class="rightTool3D" id="iconViewNavigate" title="View and Navigate"><i class="eye"></i></a></li>
+					<li class="3DOnly"><a href="#" class="rightTool3D" id="iconBookmark" title="Bookmarks"><i class="tips"></i></a></li>
+					<!-- <li><a href="#"  id="info"><i class="info"></i></a></li> -->
+					<li class="3DOnly"><a href="#" class="rightTool3D" id="iconQuickAnalysis" title="Quick analysis"><i class="list"></i></a></li>
+					<li class="3DOnly"><a href="#" class="rightTool3D" id="iconEditBlock" title="Block editing"><i class="edit"></i></a></li>
+					<li class="3DOnly"><a href="#" class="rightTool3D" id="iconPhotoMontage" title="Photo montage"><i class="camera"></i></a></li>
+					<li class="3DOnly"><a href="#" class="rightTool3D" id="iconFlyTo" title="Fly to location"><i class="flyto"></i></a></li>
+					<li class="3DOnly"><a href="#" class="rightTool3D" id="iconTools" title="Quick tools"><i class="setting"></i></a></li>
+					<!-- <li class="3DOnly"><a href="#" class="rightTool3D" id="golable" title="Project management"><i class="golable"></i></a></li> -->
+				</div>
+				
+				<div style="display:none;">
+					<li><a href="#" id="userinfo1"><i class="info"></i></a></li>
+					<li><a href="#" id="userinfo2" style="display:none;"><i class="info"></i></a></li>
+					
+					<li style="margin-top:40px;"><a href="#" id="search"><i class="search "></i></a></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="2D&nbsp;Map" class="btnToggleMapMode"><i class="fa fa-map fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Fly&nbsp;to&nbsp;location" id="iconFlyTo"><i class="fa fa-plane fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Settings" id="iconSettings"><i class="fa fa-cog fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="3D&nbsp;Measurement" id="icon3DMeasure"><i class="fa fa-arrows-h fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Edit&nbsp;block" id="iconEditBlock"><i class="fa fa-pencil fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Favourite&nbsp;scenes" id="iconBookmark"><i class="fa fa-bookmark fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Profile&nbsp;analysis&nbsp;2" id="btnProfile2"><i class="fa fa-area-chart fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Skyline&nbsp;analysis" id="btnSkyline"><i class="fa fa-list-alt fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Clear&nbsp;analysis" id="btnClearAll" onclick="threeDGIS.threeDView.removeAnalysisEntities();"><i class="fa fa-trash fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+					<li><div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Photo&nbsp;montage" id="iconPhotoMontage"><i class="fa fa-window-restore fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+				</div>
+			</ul>
+		</div>
+	  
+		<div id="toolsetEditing" style="position:absolute; bottom:50px; z-index=3000; display:none">
+			<div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Add&nbsp;block" id="btnAddBlock"><i class="fa fa-plus fa-2x toolsetItem3D" aria-hidden="true"></i></a><br /></div>
+			<div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Edit&nbsp;block" id="btnEditBlock"><i class="fa fa-pencil fa-2x toolsetItem3D" aria-hidden="true"></i></a><br /></div>
+			<div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Delete&nbsp;block" id="btnDeleteBlock"><i class="fa fa-trash fa-2x toolsetItem3D" aria-hidden="true"></i></a><br /></div>
+			<div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Back&nbsp;to&nbsp;3D" id="btnBackTo3D"><i class="fa fa-chevron-circle-left fa-2x toolsetItem3D" aria-hidden="true"></i></a><br /></div>
+		</div>
+		
+		<div id="toolset2D" style="position:absolute; right:10px; bottom:120px; z-index=3000; display: none;">
+			<div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="3D&nbsp;Scene" class="btnToggleMapMode"><i class="fa fa-fort-awesome fa-2x toolsetItem2D" aria-hidden="true"></i></a><br /></div>
+			<div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Zoom&nbsp;to&nbsp;Scale" id="btnSetScale2D"><i class="fa fa-arrows-h fa-2x toolsetItem2D" aria-hidden="true"></i></a><br /></div>
+			<div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Zoom&nbsp;to" id="iconZoomTo"><i class="fa fa-plane fa-2x toolsetItem2D" aria-hidden="true"></i></a><br /></div>
+			<div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Adjust&nbsp;transparency" id="iconTransp2D"><i class="fa fa-square-o fa-2x toolsetItem2D" aria-hidden="true"></i></a><br /></div>
+			<div class="rightToolContainer"><a href="#" data-toggle="tooltip" data-placement="left" title="Layer&nbsp;reorder" id="iconLayerReorder"><i class="fa fa-arrows-v fa-2x toolsetItem2D" aria-hidden="true"></i></a><br /></div>
+		</div>
+      
+		<div class="modal fade" id="dialogModal" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title" id="exampleModalLabel">Attribute table</span>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="dialogBody" style="text-align:center; overflow: auto; max-height:800px; max-width:800px;">
+						<table class="table table-bordered" id="attributeTable"
+						   data-toggle="table"
+						   data-height="650"
+						   data-pagination="true"
+						   data-page-size="10"
+						   data-page-list="[20,50,100]"
+						   data-show-export="true"
+						   data-striped="true"
+						   data-pagination-first-text="First"
+						   data-pagination-pre-text="Previous"
+						   data-pagination-next-text="Next"
+						   data-pagination-last-text="Last">
+						</table>
+						<table style="width:95%; text-align:center;" border="0">
+							<tr>
+								<td style="width:50%"><a href="#" id="attrTablePrevRecords"><<< Previous 1000 records</a></td>
+								<td style="width:50%"><a href="#" id="attrTableNextRecords">Next 1000 records >>></a></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="identifyModal" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title" id="exampleModalLabel">Object identification</span>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="dialogBody" style="overflow: auto; max-height:800px; max-width:800px;">
+						<table class="table table-bordered" id="identifyTable"
+						   data-toggle="table"
+						   data-height="650"
+						   data-striped="true">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="flyToModal" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title">Fly to location</span>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="flyToBody" style="overflow: auto; max-height:600px; max-width:800px;">
+						<table>
+							<tr>
+								<td style="width:300px;">Easting:</td>
+								<td><input id="txtLng"></input></td>
+							</tr>
+							<tr>
+								<td>Northing:</td>
+								<td><input id="txtLat"></input></td>
+							</tr>
+							<tr>
+								<td>Height:</td>
+								<td><input id="txtHeight"></input></td>
+							</tr>
+							<tr>
+								<td>Head (deg):</td>
+								<td><input id="txtHead"></input></td>
+							</tr>
+							<tr>
+								<td>Tilt (deg):</td>
+								<td><input id="txtTilt"></input></td>
+							</tr>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnFlyTo">Fly to location</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="zoomToModal" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title">Zoom to location</span>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="zoomToBody" style="overflow: auto; max-height:600px; max-width:800px;">
+						<table>
+							<tr>
+								<td style="width:300px;">Easting:</td>
+								<td><input id="txtEasting"></input></td>
+							</tr>
+							<tr>
+								<td>Northing:</td>
+								<td><input id="txtNorthing"></input></td>
+							</tr>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnZoomToGo">Zoom to location</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="transpModal2D" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title">Change transparency</span>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="transpBody2D" style="overflow: auto; max-height:600px; max-width:800px;">
+						<select id="transpLayers2D">
+							<option value="Tree">Tree</option>
+							<option value="Building">Building</option>
+							<option value="Podium">Podium</option>
+							<option value="DOP">DOP</option>
+						</select>
+						<br /><br />
+						Layer transparency:&nbsp;&nbsp;<input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="100"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="reorderModal" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title">2D layer reorder</span>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="reorderBody" style="overflow: auto; max-height:600px; max-width:800px;">
+						<table id="layerReorderTable">
+							<tr layerName="Tree">
+								<td>Tree</td>
+								<td><i class="fa fa-arrow-up fa-2x layerUp" aria-hidden="true" layerName="Tree"></i><i class="fa fa-arrow-down fa-2x layerDown" aria-hidden="true" layerName="Tree"></i></td>
+							</tr>
+							<tr layerName="Building">
+								<td style="width:400px;">Building</td>
+								<td><i class="fa fa-arrow-up fa-2x layerUp" aria-hidden="true" layerName="Building"></i><i class="fa fa-arrow-down fa-2x layerDown" aria-hidden="true" layerName="Building"></i></td>
+							</tr>
+							<tr layerName="Podium">
+								<td>Podium</td>
+								<td><i class="fa fa-arrow-up fa-2x layerUp" aria-hidden="true" layerName="Podium"></i><i class="fa fa-arrow-down fa-2x layerDown" aria-hidden="true" layerName="Podium"></i></td>
+							</tr>
+							<tr layerName="DOP">
+								<td>DOP</td>
+								<td><i class="fa fa-arrow-up fa-2x layerUp" aria-hidden="true" layerName="DOP"></i><i class="fa fa-arrow-down fa-2x layerDown" aria-hidden="true" layerName="DOP"></i></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="gltfModal" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title">3D Footprint</span>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="zoomToBody" style="overflow: auto; max-height:600px; max-width:800px;">
+						<!-- <table class="table" border="0">
+							<tr>
+								<td style="width:300px;">Rotation:</td>
+								<td style="width:300px;"><input id="exGLTFRotation" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="359" data-slider-step="5" data-slider-value="0"/></td>
+								<td><input style="width:50px;" id="exGLTFRotationValue" value="0" type="text"/></td>
+							</tr>
+							<tr>
+								<td>Scale:</td>
+								<td><input id="exGLTFScale" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="5" data-slider-step="0.2" data-slider-value="1"/></input></td>
+							</tr>
+						</table> -->
+						<form class="form-horizontal" style="margin-top:15px;">
+							<div class="form-group">
+								<label class="control-label col-xs-3" for="selSceneMode">Rotation:</label>
+								<div class="col-xs-8"> 
+									<input id="exGLTFRotation" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="359" data-slider-step="5" data-slider-value="270"/>
+									<input style="width:50px;" id="exGLTFRotationValue" value="270" type="text"/>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="control-label col-xs-3" for="selSceneMode">Scale:</label>
+								<div class="col-xs-8"> 
+									<input id="exGLTFScale" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="5" data-slider-step="0.2" data-slider-value="1"/></input>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title">Scene settings</span>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="identifyBody" style="overflow: auto; max-height:600px;">
+						<form>						
+							<div class="form-group row">
+								<label for="selectFOV" class="col-sm-3 col-form-label">Scene FOV</label>
+								<div class="col-sm-9">
+									<select class="form-control col-xs-2" id="selectFOV" name="fov">
+										<option value="-1"> </option>
+										<option value="30">30</option>
+										<option value="50">50</option>
+										<option value="80">80</option>
+										<option value="100">100</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group row">
+								<label for="selectSplit" class="col-sm-3 col-form-label">Split Screen</label>
+								<div class="col-sm-9">
+									<select class="form-control col-xs-2" id="selectSplit" name="split">
+										<option value="0">None</option>
+										<option value="1">Horizontal</option>
+										<option value="2">Vertical</option>
+										<option value="4">Triple</option>
+										<option value="3">Quad</option>
+									</select>
+								</div>
+							</div>
+							
+							<button type="button" class="btn" data-dismiss="modal">Close</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="montageScaleBar" style="position:absolute; left:70px; top:35px; z-index:1003; display:none">
+			<input id="exMontageTransp" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
+		</div>
+		<div id="montageScaleBarGoogle" style="position:absolute; left:70px; top:70px; z-index:1003; display:none">
+			<input id="exGoogleTransp" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="100"/>
+		</div>
+		
+		<div class="modal fade" id="profileOSGBModal" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title">Profile result</span>
+						<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button> -->
+					</div>
+					<div class="modal-body" style="overflow: auto; max-height:600px; max-width:800px;">
+						<canvas id="profileImg"></canvas>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="divBlockEditing" style="padding:15px; background-color:white; z-index:3000; display:none;">
+			Selected block:&nbsp;<span id="valueSelectedBlock"></span>
+			<br />
+			Floors:&nbsp;
+			<input id="exBlockHeight" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+			<br /><br />
+			Edit mode:&nbsp;
+			<br />
+			<div class="btn-group" role="group" aria-label="btnGroupEditMode" id="btnGroupEditMode">
+				<button type="button" class="btn btn-primary" data-EditMode="1">Reshape</button>
+				<button type="button" class="btn btn-secondary" data-EditMode="8">Move</button>
+				<button type="button" class="btn btn-secondary" data-EditMode="4">Rotate</button>
+				<button type="button" class="btn btn-secondary" data-EditMode="2">Resize</button>
+			</div>
+			<br /><br />
+			Floor Height: <input type="number" id="txtFHt" style="width:50px;" min="0" max="10" />
+			<br />
+			No. of Floor: <input type="number" id="txtNoFloor" style="width:50px;" min="0" max="100" />
+			<br />
+			Building Height: <span id="txtHt"></span>
+			<br />
+			Footprint Area sq.m: <span id="txtArea"></span>
+										
+			<br />
+			GFA (Area * No. of Floor): <span id="txtGFA"></span>
+			<br /><br />
+			<button id="btnEditConfirm" disabled>Start Edit</button>
+			<button id="btnEditReset" style="display:none;">Reset Edit</button>
+			<button id="btnEditCancel" style="display:none;">Cancel</button>
+		</div>
+
+		<div id="divOptionEdit" style="display:none; padding:10px;">
+			<form id="frmDesignTypeOption" class="form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="designType">Design type:</label>
+					<div class="col-xs-7"> 
+						<select class="form-control col-xs-5" id="selectDesignType" name="designType">
+							<option value="Domestic" selected>Domestic</option>
+							<!-- <option value="Non-Domestic">Non-Domestic</option> -->
+						</select>
+					</div>
+				</div>
+			</form>
+			
+			<form id="frmDomesticOption" class="form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="selDomesticType">Tower type:</label>
+					<div class="col-xs-7"> 
+						<select class="form-control col-xs-5" id="selDomesticType" name="selDomesticType">
+							<option value="Type1">Apartment</option>
+							<option value="Type2">House</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtTowerNo">No. of Tower:</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtTowerNo" id="txtTowerNo" value="0">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtFlatSize">Avg flat size (sq.m):</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtFlatSize" id="txtFlatSize" value="0">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtFlatNo">No. of flat per floor:</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtFlatNo" id="txtFlatNo" value="0">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtDomesticFloorNo">No. of domestic floor:</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtDomesticFloorNo" id="txtDomesticFloorNo" value="0">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtLobbyFloorNo">No. of lobby floor:</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtLobbyFloorNo" id="txtLobbyFloorNo" value="0">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtDomesticHeight">Domestic Floor Height (m):</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtDomesticHeight" id="txtDomesticHeight" value="3">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtLobbyHeight">Lobby Floor Height (m):</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtLobbyHeight" id="txtLobbyHeight" value="5">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtRefugeHeight">Refuge Floor Height (m):</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtRefugeHeight" id="txtRefugeHeight" value="3">
+					</div>
+				</div>
+			</form>
+			
+			<form id="frmNonDomesticOption" class="form-horizontal" style="display:none;">
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtTowerNo">No. of Tower:</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtTowerNo" id="txtTowerNo" value="0">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtFloorSize">Floor size (sq.m):</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtFloorSize" id="txtFloorSize" value="0">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtNonDomesticFloorNo">No. of non-domestic floor:</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtNonDomesticFloorNo" id="txtNonDomesticFloorNo" value="0">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtLobbyFloorNo">No. of lobby floor:</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtLobbyFloorNo" id="txtLobbyFloorNo" value="0">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtNonDomesticHeight">Non-Domestic Floor Height (m):</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtNonDomesticHeight" id="txtNonDomesticHeight" value="4">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtLobbyHeight">Lobby Floor Height (m):</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtLobbyHeight" id="txtLobbyHeight" value="6">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="txtRefugeHeight">Refuge Floor Height (m):</label>
+					<div class="col-xs-7"> 
+						<input type="number" class="form-control" name="txtRefugeHeight" id="txtRefugeHeight" value="4">
+					</div>
+				</div>
+			</form>
+			<div>
+				Proposed total GFA: <span id="spanGFAResult"></span> <br />
+				Total No. of Flat: <span id="spanFlatNoResult"></span> <br />
+			</div>
+			<button type="button" id="btnDefineSite" class="btn btn-default" data-dismiss="modal">Define Site</button>
+			<button type="button" id="btnDefineBlock" class="btn btn-default" data-dismiss="modal">Plot blocks</button>
+			<button type="button" id="btnCalculateGFA" class="btn btn-primary" data-dismiss="modal">Save option</button>
+		</div>
+		
+		<div style="position:absolute; left:70px; top:35px; z-index:1003;">
+			<input id="exDay" data-slider-id='ex1Slider' type="text" data-slider-min="14400" data-slider-max="100800" data-slider-step="1" data-slider-value="14400"/></input>
+		</div>
+		
+		<div id="chart" style="width: 600px;height:400px;position: absolute;top: 0;left: 0;bottom : 0;right : 0;margin: auto;display: none;background-color: #ffffff"></div>
+    </div>
+	
+	<div id="divBottomRightTool" class="navbar-collapse templatemo-sidebar2" style="position:absolute; right:0px; bottom:120px; z-index:9999;">
+		<ul class="templatemo-sidebar2-menu">
+			<!--<li class="3DOnly"><a id="iconMeasure" title="Measurement"><img src="images/ruler.png" class="imgIconRight"></img></i></a></li>-->
+			<li><div class="rightToolContainer"><a title="Search" id="iconSearch"><i class="fa fa-search fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+			<li><div class="rightToolContainer"><a id="iconMeasure" title="Quick Measurement"><img src="images/ruler_icon.png" style="width:28px; height:28px;"></img></a></div></li>
+			<li><div class="rightToolContainer"><a id="btnCapture" title="Screen capture"><i class="fa fa-camera fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+			<li><div class="rightToolContainer"><a id="win1" title="Minimap"><i class="fa fa-map fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+			<li><div class="rightToolContainer"><a title="Share(developing)"><i class="fa fa-share-alt fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+			<li><div class="rightToolContainer"><a title="Delete analysis" id="btnClearAll" onclick="threeDGIS.threeDView.removeAnalysisEntities();"><i class="fa fa-trash fa-2x toolsetItem3D" aria-hidden="true"></i></a></div></li>
+		</ul>
+	</div>
+	
+	<footer class="templatemo-footer" id="footer3D">
+		<div class="layui-form-item">
+			<span style="margin-left:40px; line-height:30px;color:#fffaf6;float:left;width:24%;" id="txtLocation"> Location:X,Y(HK80)</span>
+			<span style="margin-left:1%;line-height:30px;color:#fffaf6;float:left;width:24%;" id="txtScaleElev"> Scale(2D)/Elevation(3D)</span>
+			<span style="margin-left:1%;line-height:30px;color:#fffaf6;float:left;width:45%;" id="txtSystemInfo"> System Message/Operation tips </span>
+		</div>
+    </footer>  
+	
+	<footer class="templatemo-footer" id="footer2D" style="display:none;">
+		<div class="layui-form-item">
+			<span style="margin-left:40px; line-height:30px;color:#fffaf6;float:left;width:24%;" id="txtLocation2D"> Pointer </span>
+			<span style="margin-left:1%;line-height:30px;color:#fffaf6;float:left;width:24%;" id="txtScaleElev2D"> Map scale</span>
+			<span style="margin-left:1%;line-height:30px;color:#fffaf6;float:left;width:45%;" id="txtSystemInfo2D"> 2D Map initialized </span>
+		</div>
+    </footer>
+	
+	<div id="montageDiv" style="overflow: auto; max-height:600px; max-width:800px; display:none; text-align:center; overflow:hidden; margin-left:5px;">
+		<br />
+		<form id="formMontage" name="frmImgFile" method="POST" enctype="multipart/form-data">
+			<div class="form-group row">
+				<label for="imgFile" class="col-sm-3 col-form-label">Select image file</label>
+				<div class="col-sm-8" style="padding-right:0px !important;">
+					<input class="form-control col-xs-2" type="file" accept="image/*"  name="imgFile" id="imgMontageFile">
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="selectMontageMoveMode" class="col-sm-3 col-form-label">Split Screen</label>
+				<div class="col-sm-8" style="padding-right:0px !important;">
+					<select class="form-control col-xs-2" id="selectMontageMoveMode" name="split">
+						<option value="1">Pano mode</option>
+						<option value="0">Bird-eye mode</option>
+					</select>
+				</div>
+			</div>
+			
+			<div id="divExifInfo" style="display:none;">
+				<div class="form-group row">
+					<label for="numLat" class="col-sm-3 col-form-label">Northing (m)</label>
+					<div class="col-sm-8" style="padding-right:0px !important;">
+						<input type="number" id="numLat" name="numLat" step="0.01" disabled></input>
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<label for="numLng" class="col-sm-3 col-form-label">Easting (m)</label>
+					<div class="col-sm-8" style="padding-right:0px !important;">
+						<input type="number" id="numLng" name="numLng" step="0.001" disabled></input>
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<label for="numAlt" class="col-sm-3 col-form-label">Altitude (m)</label>
+					<div class="col-sm-8" style="padding-right:0px !important;">
+						<input type="number" id="numAlt" name="numAlt" step="0.01" disabled></input>
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<label for="numHeading" class="col-sm-3 col-form-label">Heading (deg)</label>
+					<div class="col-sm-8" style="padding-right:0px !important;">
+						<input type="number" id="numHeading" name="numHeading" step="0.01" disabled></input>
+					</div>
+				</div>
+			</div>
+		</form>
+		<br />
+		<button type="button" class="btn" id='btnQuitMontage'>Stop montage</button>
+	</div>
+	
+	<div id="layerBookmark" style="display:none; padding-left:5px; padding-top:10px; width:270px;">
+		<div id="divBookmarkCtrl" style="width:100%; vertical-align:middle; margin-bottom:26px;">
+			<input id="txtBookmarkName" type="text" class="form-control col-xs-8 col-sm-8" style="border-radius:5px; width:200px;" placeholder="Bookmark name"></input>
+			<span id="btnAddBookmark" class="spanBtn" title="Add new bookmark"><i class="fa fa-plus fa-2x" aria-hidden="true" style="margin-left:5px;"></i></span>
+			<span id="btnDeleteBookmark" class="spanBtn" title="Delete bookmark"><i class="fa fa-trash fa-2x" aria-hidden="true" style="margin-left:5px;"></i></span>
+		</div>
+		
+		<div class="list-group" style="width:260px;">
+			<!-- <button type="button" class="list-group-item">Cras justo odio</button>
+			<button type="button" class="list-group-item">Dapibus ac facilisis in</button>
+			<button type="button" class="list-group-item">Morbi leo risus</button>
+			<button type="button" class="list-group-item">Porta ac consectetur ac</button>
+			<button type="button" class="list-group-item">Vestibulum at eros</button> -->
+		</div>
+	</div>
+	
+	<div id="layerUserProfile" style="display:none; padding-left:5px; padding-top:10px; width:270px;">
+		<div>
+			<h4><%=APP_NAME %></h4>
+		</div>
+		<div>
+			<div id="divUserID"><%=session.getAttribute("USER_ID") %> (<%=session.getAttribute("USER_POST") %>)</div>
+		</div>
+		<hr>
+		<div>
+			<div>Current Project: <span id="spanProjectName" title="">No project opened</span></div>
+			<div>Current Option: <span id="spanOptionName" title="">No option opened</span></div>
+			
+			<div id="golable" style="margin-top:30px !important;" class="profileLinks"><a><i class="fa fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;Project Management Panel</a></div>
+		</div>
+		<hr>
+		<div id="devLinks">
+			<!-- External settings -->
+			<div class="profileLinks"><a id="hyperSiteSearch" target="_blank"><i class="fa fa-object-group" aria-hidden="true"></i>&nbsp;&nbsp;Site Search Tool</a></div>
+			<div class="profileLinks"><a id="hyperComments" target="_blank"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;Make comments</a></div>
+			<div class="profileLinks"><a id="hyperUAT" target="_blank"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;UAT Plan</a></div>
+		</div>
+		<hr>
+		<!--<div>
+			Settings
+		</div>-->
+	</div>
+	
+	<div id="searchInfo" style="position:absolute; background-color:rgba(50,50,50,0.5); color:white; right:60px; bottom:380px; z-index:1005; width:360px; display:none;">
+		<table>
+			<tr>
+				<td width="50%" style="color:white">
+					<u>Searchable Layers: </u>
+					<ul>
+						<li>Application No.</li>
+						<li>Amendment No.</li>
+						<li>Building Name</li>
+						<li>GLA</li>
+						<li>Land Lot No.</li>
+						<li>OZP Plan No.</li>
+					</ul>
+				</td>
+				<td style="color:white">
+					<ul>
+						<br />
+						<li>Road name</li>
+						<li>SSSI</li>
+						<li>Tenancy</li>
+						<li>Old-Valued Tree</li>
+						<li>Lamp Post</li>
+						<li>Hydrant</li>
+					</ul>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<script>
+		function gup( name, url ) {
+			if (!url) url = location.href;
+			name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+			var regexS = "[\\?&]"+name+"=([^&#]*)";
+			var regex = new RegExp( regexS );
+			var results = regex.exec( url );
+			return results == null ? null : results[1];
+		}
+		
+		var userkey = gup('UserKey',window.location.href);
+		if(userkey!=null)
+			window.location = window.location.href.split('?')[0];
+	</script>
+	
+<script>
+var isgroup1=false;
+var leftIndex = -1;
+var rightIndex = -1;
+var infoIndex = -1;
+var rightClickIndex = -1;
+var $selectedLeftIcon;
+
+var leftToolOpened=-1;
+
+function closeLeftSidebar() {
+	if(leftIndex!=-1) {
+		layer.close(leftIndex);
+	}
+	
+	if(leftToolOpened!=-1) {
+		// leftToolOpened = -1;
+		if($selectedLeftIcon!=undefined) {
+			$selectedLeftIcon.css('color','white');
+			$selectedLeftIcon = undefined;
+		}
+	}
+}
+
+function closeRightSidebar() {
+	if(rightIndex!=-1)
+		layer.close(rightIndex);
+}
+
+function closeRightClick() {
+	if(rightClickIndex!=-1)
+		layer.close(rightClickIndex);
+}
+
+function openSearchResult(searchText) {
+	layer.open({
+		type: 1,
+		title: 'Location Search ('+searchText+')',
+		shade: 0,
+		// offset: [400,0],
+		area: '600px',
+		content: $('#searchBody'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+		zIndex: layer.zIndex,
+		maxmin: true,
+		success: function(layero, index){
+			$('#searchBody').css('display','block');
+			layer.setTop(layero);
+		},
+		cancel: function(index, layero){ 
+			$('#searchBody').css('display','none');
+		},
+		min: function(layero){ 
+			var top = $(window).height()-72;
+			setTimeout(function() {
+				layero.css({left: '55px', top: top+'px'});
+			},0);
+		}
+	});
+}
+
+// A lot of thing to do, after iframe calls the webpage, read from parent page parameters
+$('#group1').on('click', function(){
+	var windowHeight = $(window).height();
+	closeLeftSidebar();
+	
+	var $i = $(this).find('i');
+
+	if(leftToolOpened+''==$(this).attr('left-index')) {
+		leftToolOpened = -1;
+		$i.css('color','white');
+		$selectedLeftIcon = undefined;
+		
+		return;
+	}
+	else {
+		$i.css('color','aqua');
+		if($selectedLeftIcon!=undefined)
+			$selectedLeftIcon.css('color','white');
+			
+		$selectedLeftIcon = $i;
+	}
+	leftToolOpened = $(this).attr('left-index');
+
+	leftIndex = layer.open({
+		type: 2,
+		title: false,
+		area: ['270px', (windowHeight-29)+'px'],
+		offset: ['-1px', '61px'],
+		closeBtn: 0,
+		anim: 6,
+		shade: 0,
+		id: 'left-panel',
+		isOutAnim: false,
+		content: ['group.html'],
+		success: function(layero, index){
+
+		},
+		end: function(){
+			isgroup1 = false;
+		},
+	});
+	isgroup1 = true;
+});
+
+$('#win1').on('click', function(){
+// document.getElementById("minimap").innerHTML="11111"; 
+	var width = $(window).width();
+	closeRightSidebar();
+	
+	if(rightIndex!=-1) {
+		rightIndex = -1;
+		return;
+	}
+	// leftToolOpened = $(this).attr('left-index');
+	
+	rightIndex = layer.open({
+		  type: 1,
+		  shade: 0,
+		  title: false,
+		  closeBtn:0,
+		  area: ['240px', '200px'],
+		  offset: ['5px', (width-245)+'px'],
+		  content: $('#minimap'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+		  success: function(layero, index){
+			/*threeDGIS.threeDView.updateCameraInfo(true, true);
+			console.log('read');
+			$('#minimap').css('cursor','crosshair');*/
+		  },
+		  cancel: function(index, layero){ 
+			console.log('Minimap closed');
+		} 
+	});
+//Ajax获取
+});
+
+$('#search').on('click', function(){
+	closeRightSidebar();
+	
+	rightIndex = layer.prompt({
+		formType: 0,
+		title: false,
+		offset: 'rt2',
+		shade: 0,
+		closeBtn: 0,
+		area: ['200px', '40px'],
+		success: function(layero) {
+			layero.find('.layui-layer-btn0').html('Search');
+			layero.find('.layui-layer-btn1').html('Cancel');
+		}
+	}, function(value, index, elem){
+
+	});
+});
+
+$('#iconQuickAnalysis').on('click', function(){
+	closeRightSidebar();
+	
+	rightIndex = layer.open({
+		type: 1,
+		shade: 0,
+		title: false,
+		area: ['240px', '200px'],
+		offset: 'rt',
+		content: $('#rightSidebarAnalysis'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+		success: function(layero, index){
+			
+		},
+		cancel: function(index, layero){ 
+			// console.log('Minimap closed');
+		} 
+	 });
+	//Ajax获取
+});
+
+$('#iconTools').on('click', function(){
+	closeRightSidebar();
+	
+	rightIndex = layer.open({
+		type: 1,
+		shade: 0,
+		title: false,
+		area: ['240px', '200px'],
+		offset: 'rt',
+		content: $('#rightSidebarQuickTools'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+		success: function(layero, index){
+			
+		},
+		cancel: function(index, layero){ 
+			// console.log('Minimap closed');
+		} 
+	 });
+	//Ajax获取
+});
+
+$('#golable').on('click', function(){
+	var username = threeDGIS.userID;
+	var post = threeDGIS.userPost;
+	
+	closeLeftSidebar();
+	
+	layer.open({
+		type: 2,
+		title: 'Project Management',
+		maxmin: true,
+		shade: 0,
+		shadeClose:false,
+		closeBtn: 1,
+		area: ['630px', '500px'], //自定义文本域宽高
+		content: ['project_manager.jsp?username='+username+'&post='+post],
+		success: function(layero, index){
+			
+		},
+		min: function(layero){ 
+			var top = $(window).height()-72;
+			setTimeout(function() {
+				layero.css({left: '61px', top: top+'px'});
+			},0);
+		}
+	});
+});
+
+var isinfo=false;
+$('#userinfo1').on('click', function(){
+	if(infoIndex!=-1)
+		layer.close(infoIndex);
+
+	infoIndex = layer.open({
+		type: 1,
+		title: false,
+		area: ['300px', '120px'],
+		offset: 'rt3',
+		closeBtn: 0,
+		skin:'userinfo-class',
+		anim: 7,
+		shade: 0,
+		isOutAnim: false,
+		content: $('#divUserInfo'),
+		end: function(){
+			isinfo = false;
+		}
+	});
+    isinfo = true;
+
+	document.getElementById("userinfo1").style.display = 'none' ;
+	document.getElementById("userinfo2").style.display = 'block' ;
+ });
+
+$('#userinfo2').on('click', function(){
+	layer.close(infoIndex);
+	infoIndex = -1;
+	document.getElementById("userinfo2").style.display = 'none' ;
+	document.getElementById("userinfo1").style.display = 'block' ;
+});  
+
+$('#iconMeasure').on('click', function() {
+	
+});
+
+$('#iconViewNavigate').on('click', function(){
+	closeRightSidebar();
+	
+	rightIndex = layer.open({
+		type: 1,
+		shade: 0,
+		title: false,
+		area: ['400px', '310px'],
+		offset: 'rt',
+		content: $('#rightSidebarViewSetting'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+		success: function(layero, index){
+			
+		},
+		cancel: function(index, layero){ 
+			// console.log('Minimap closed');
+		} 
+	});
+});
+
+$('#leftIconBookmarks').on('click', function(){
+	var windowHeight = $(window).height();
+	closeLeftSidebar();
+	
+	var $i = $(this).find('i');
+
+	if(leftToolOpened+''==$(this).attr('left-index')) {
+		leftToolOpened = -1;
+		$i.css('color','white');
+		$selectedLeftIcon = undefined;
+		
+		return;
+	}
+	else {
+		$i.css('color','aqua');
+		if($selectedLeftIcon!=undefined)
+			$selectedLeftIcon.css('color','white');
+			
+		$selectedLeftIcon = $i;
+	}
+	leftToolOpened = $(this).attr('left-index');
+	
+	leftIndex = layer.open({
+		type: 1,
+		title: 'Bookmarks',
+		area: ['270px', (windowHeight-29)+'px'],
+		offset: ['-1px', '61px'],
+		closeBtn: 0,
+		anim: 6,
+		shade: 0,
+		id: 'left-panel',
+		move: false,
+		isOutAnim: false,
+		content: $('#layerBookmark'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+		success: function(layero, index){
+			$('#layerBookmark').css('display','block');
+		},
+		cancel: function(index, layero){ 
+			$('#layerBookmark').css('display','none');
+		} 
+	});
+});
+
+$('#leftIconUserProfile').on('click', function(){
+	var windowHeight = $(window).height();
+	closeLeftSidebar();
+	
+	var $i = $(this).find('i');
+
+	if(leftToolOpened+''==$(this).attr('left-index')) {
+		leftToolOpened = -1;
+		$i.css('color','white');
+		$selectedLeftIcon = undefined;
+		
+		return;
+	}
+	else {
+		$i.css('color','aqua');
+		if($selectedLeftIcon!=undefined)
+			$selectedLeftIcon.css('color','white');
+			
+		$selectedLeftIcon = $i;
+	}
+	leftToolOpened = $(this).attr('left-index');
+	
+	leftIndex = layer.open({
+		type: 1,
+		title: false,
+		area: ['270px', (windowHeight-29)+'px'],
+		offset: ['-1px', '61px'],
+		closeBtn: 0,
+		anim: 6,
+		shade: 0,
+		id: 'left-panel',
+		move: false,
+		isOutAnim: false,
+		content: $('#layerUserProfile'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+		success: function(layero, index){
+			$('#leftIconUserProfile').css('display','block');
+		},
+		cancel: function(index, layero){ 
+			$('#leftIconUserProfile').css('display','none');
+		} 
+	});
+});
+
+$('#leftIconNavigation').on('click', function(){
+	var windowHeight = $(window).height();
+	closeLeftSidebar();
+	
+	var $i = $(this).find('i');
+
+	if(leftToolOpened+''==$(this).attr('left-index')) {
+		leftToolOpened = -1;
+		$i.css('color','white');
+		$selectedLeftIcon = undefined;
+		
+		return;
+	}
+	else {
+		$i.css('color','aqua');
+		if($selectedLeftIcon!=undefined)
+			$selectedLeftIcon.css('color','white');
+			
+		$selectedLeftIcon = $i;
+	}
+	leftToolOpened = $(this).attr('left-index');
+	
+	leftIndex = layer.open({
+		type: 2,
+		title: false,
+		area: ['300px', (windowHeight-29)+'px'],
+		offset: ['-1px', '61px'],
+		closeBtn: 0,
+		anim: 6,
+		shade: 0,
+		id: 'left-panel',
+		isOutAnim: false,
+		content: ['camera.html'],
+		success: function(layero, index){
+		}
+	});
+});
+
+$('#iconFlyTo').click(function() {
+	closeRightSidebar();
+	
+	rightIndex = layer.open({
+	  type: 2,
+	  title:'Camera',
+	  area: ['250px', '470px'],
+	  offset: 'rt2',
+	  maxmin: true,
+	  anim: 6,
+	  shade: 0,
+	  isOutAnim: false,
+	  content: ['camera.html', 'no'],
+	  min: function(layero){ 
+			var top = $(window).height()-72;
+			setTimeout(function() {
+				layero.css({left: '61px', top: top+'px'});
+			},0);
+		}
+	});
+});
+
+$(document).ready(function(){
+	$(".rightTool3D").hover(function(){
+		$(this).toggleClass('active');
+	});
+	
+	$('#iconSearchInfo').mouseover(function(){
+		$('#searchInfo').css('display','block');
+	});
+	
+	$('#iconSearchInfo').mouseout(function(){
+		$('#searchInfo').css('display','none');
+	});
+	
+	$('*').click(function(e) 
+	{
+		var container = $('#rightClickVector');
+
+		// if the target of the click isn't the container nor a descendant of the container
+		if (!container.is(e.target) && container.has(e.target).length === 0) 
+		{
+			closeRightClick();
+		}
+	});
+	
+	$('.rightClickItem').click(function(e) {
+		closeRightClick();
+	});
+});
+
+ </script>
+ 
+	<!-- 3D GIS scripts -->
+	<script>
+		var host = document.location.host;
+		var protocol = document.location.protocol;
+		
+		if(host == "")
+		{
+			host = protocol+"//localhost:8090";
+		}
+		else
+		{
+			host = protocol+"//" + host;
+		}
+		
+		function onload(Cesium) {	
+			try
+			{
+				var viewer = new Cesium.Viewer('cesiumContainer',{
+					imageryProvider:new Cesium.SingleTileImageryProvider({
+						url : '../iClient/for3D/webgl/examples/images/worldimage.jpg'
+					})
+				});
+			}
+			catch(e)
+			{
+				// Remove the catch statement
+				;//location.reload();
+			}
+
+			$('#btnAnno').click(function(){
+				// divAnno
+				console.log(layer);
+				
+				closeRightSidebar();
+	
+				rightIndex = layer.open({
+					type: 1,
+					shade: 0,
+					title: false,
+					area: ['240px', '120px'],
+					offset: 'rt',
+					content: $('#divAnno'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+					success: function(layero, index){
+						
+					},
+					cancel: function(index, layero){ 
+						threeDGIS.threeDView.enableClickSelect();
+					} 
+				});
+			});
+			
+			var blockSlider = $('#exBlockHeight').bootstrapSlider({
+				formatter: function(value) {
+					return value;
+				}
+			});
+			
+			var transpSlider2D = $('#ex2').bootstrapSlider({
+				formatter: function(value) {
+					return value + '%';
+				}
+			});
+			
+			var gltfRotationSlider = $('#exGLTFRotation').bootstrapSlider({
+				formatter: function(value) {
+					return value + ' deg';
+				}
+			});
+			
+			var gltfScaleSlider = $('#exGLTFScale').bootstrapSlider();
+			
+			gltfScaleSlider.bootstrapSlider('on','change',function(val) {
+				var viewer = threeDGIS.threeDView.viewer;
+				var entity = viewer.entities.getById('model_gltf');
+				
+				entity.model.scale = val.newValue/35;
+				entity.model.scale = val.newValue/35;
+			});
+			
+			var daySlider = $('#exDay').bootstrapSlider({
+				formatter: function(value) {
+					var sec = value-3600*4, secLeft;
+					var hour = Math.floor(sec/3600);
+					secLeft = sec - hour*3600;
+					var min = Math.floor(secLeft/60);
+					sec = secLeft - min*60;
+					
+					return hour+':'+min+':'+sec;
+				}
+			});
+			
+			function initReorderButton() {
+
+			}
+			initReorderButton();
+		}
+	</script>
+  
+	<!-- UI scripts -->
+	<script>
+		// Test, to make div draggable
+		function startMove(initX, initY, prevX, prevY) {
+			$('.movable').on('mousemove', function(event) {
+				var thisX = event.pageX - initX;
+					thisY = event.pageY - initY;
+
+				$('.movable').offset({
+					left: thisX + prevX,
+					top: thisY + prevY
+				});
+			});
+		}
+
+		$(document).ready(function() {
+			var $table = $('#attributeTable');
+
+			$('#dialogModal').on('shown.bs.modal', function () {
+				$table.bootstrapTable('resetView');
+			});
+			
+			var clientWidth = $(window).width();
+			var clientHeight = $(window).height();
+			
+			// This makes popup unclickable...
+			$("#btnZoomTo").on('shown.bs.modal',function(){
+				$(document).off('focusin.bs.modal');
+			});
+			
+			$('#divBlockEditing').height($(window).height()-102);
+			
+			$('#leftIconEditBlock').click(function() {
+				var windowHeight = $(window).height();
+				closeLeftSidebar();
+				
+				var $i = $(this).find('i');
+
+				if(leftToolOpened+''==$(this).attr('left-index')) {
+					leftToolOpened = -1;
+					$i.css('color','white');
+					$selectedLeftIcon = undefined;
+					
+					return;
+				}
+				else {
+					$i.css('color','aqua');
+					if($selectedLeftIcon!=undefined)
+						$selectedLeftIcon.css('color','white');
+						
+					$selectedLeftIcon = $i;
+				}
+				leftToolOpened = $(this).attr('left-index');
+				
+				leftIndex = layer.open({
+					type: 1,
+					title: 'Edit block',
+					area: ['320px', (windowHeight-29)+'px'],
+					offset: ['-1px', '61px'],
+					closeBtn: 0,
+					anim: 6,
+					shade: 0,
+					id: 'left-panel',
+					move: false,
+					isOutAnim: false,
+					content: $('#divBlockEditing'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+					zIndex: 3000,
+					maxmin: false,
+					success: function(layero, index){
+						$('#divBlockEditing').css('display','block');
+						layer.setTop(layero);
+					},
+					cancel: function(index, layero){ 
+						$('#divBlockEditing').css('display','none');
+					},
+					min: function(layero){ 
+						var top = $(window).height()-72;
+						setTimeout(function() {
+							layero.css({left: '55px', top: top+'px'});
+						},0);
+					}
+				});
+			});
+		
+			$('#leftIconAnalysis').click(function() {
+				var windowHeight = $(window).height();
+				closeLeftSidebar();
+				
+				var $i = $(this).find('i');
+
+				if(leftToolOpened+''==$(this).attr('left-index')) {
+					leftToolOpened = -1;
+					$i.css('color','white');
+					$selectedLeftIcon = undefined;
+					
+					return;
+				}
+				else {
+					$i.css('color','aqua');
+					if($selectedLeftIcon!=undefined)
+						$selectedLeftIcon.css('color','white');
+						
+					$selectedLeftIcon = $i;
+				}
+				leftToolOpened = $(this).attr('left-index');
+				
+				leftIndex = layer.open({
+					type: 2,
+					title: false,
+					area: ['270px', (windowHeight-29)+'px'],
+					offset: ['-1px', '55px'],
+					closeBtn: 0,
+					anim: 6,
+					shade: 0,
+					id: 'left-panel',
+					isOutAnim: false,
+					content: ['Analysis-Group.html'],
+					success: function(layero, index){
+					
+					}
+				});
+			});
+			
+			$('#selectDesignType').on('mouseup', function(){
+				var open = $('#selectDesignType').data("isopen");
+				if($('#selectDesignType').data("isopen"))
+				{
+					var id = $('#selectDesignType option:selected').val();
+					
+					if(id=='Domestic')
+					{
+						$('#frmDomesticOption').css('display','block');
+						$('#frmNonDomesticOption').css('display','none');
+					}
+					else
+					{
+						$('#frmDomesticOption').css('display','none');
+						$('#frmNonDomesticOption').css('display','block');
+					}
+				}
+				$('#selectDesignType').data("isopen", !open);
+			});
+			
+			$('#leftIconEditOption').click(function() {
+				var windowHeight = $(window).height();
+				closeLeftSidebar();
+				
+				var $i = $(this).find('i');
+
+				if(leftToolOpened+''==$(this).attr('left-index')) {
+					leftToolOpened = -1;
+					$i.css('color','white');
+					$selectedLeftIcon = undefined;
+					
+					return;
+				}
+				else {
+					$i.css('color','aqua');
+					if($selectedLeftIcon!=undefined)
+						$selectedLeftIcon.css('color','white');
+						
+					$selectedLeftIcon = $i;
+				}
+				leftToolOpened = $(this).attr('left-index');
+				
+				leftIndex = layer.open({
+					type: 1,
+					title: 'Edit option',
+					area: ['350px', (windowHeight-29)+'px'],
+					offset: ['-1px', '55px'],
+					closeBtn: 0,
+					anim: 6,
+					shade: 0,
+					id: 'left-panel',
+					move: false,
+					isOutAnim: false,
+					content: $('#divOptionEdit'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+					zIndex: 3000,
+					maxmin: false,
+					success: function(layero, index){
+						$('#divOptionEdit').css('display','block');
+						layer.setTop(layero);
+					},
+					cancel: function(index, layero){ 
+						$('#divOptionEdit').css('display','none');
+					}
+				});
+			});
+			
+			$('#btnBuffer').click(function(){
+				layer.open({
+					type: 1,
+					title: 'Buffer query',
+					shade: 0,
+					// offset: [400,0],
+					area: '600px',
+					content: $('#bufferBody'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+					zIndex: layer.zIndex,
+					maxmin: true,
+					success: function(layero, index){
+						$('#bufferBody').css('display','block');
+						layer.setTop(layero);
+					},
+					cancel: function(index, layero){ 
+						$('#bufferBody').css('display','none');
+					},
+					min: function(layero){ 
+						var top = $(window).height()-72;
+						setTimeout(function() {
+							layero.css({left: '40px', top: top+'px'});
+						},0);
+					}
+				});
+			});
+			
+			$('#rightBottomToggle').click(function(){
+				var rightToolCSS = $('#divBottomRightTool').css('display');
+				
+				if(rightToolCSS=='none') {
+					$('#divBottomRightTool').css('display','block');
+				}
+				else {
+					$('#divBottomRightTool').css('display','none');
+				}
+			});
+			
+			$('#iconSearch').click(function() {
+				$(document).unbind("keypress.key13");
+				var searchCSS = $('#divSearch').css('display');
+				
+				if(searchCSS=='none') {
+					$('#divSearch').css('display','block');
+					$('#txtSearch').focus();
+					// Register 'Enter' click event
+					$(document).bind("keypress.key13", function(e) {
+						if(e.which == 13)
+							;
+					});
+				}
+				else {
+					$('#divSearch').css('display','none');
+					$(document).unbind("keypress.key13");
+				}
+			});
+			
+			$('#btnEditBlock').click(function(){
+				// Note that this action is the same as 'leftIconEditBlock'. DELETE THE EVENT OF THAT
+				var windowHeight = $(window).height();
+				closeLeftSidebar();
+				
+				var $i = $(this).find('i');
+
+				if(leftToolOpened+''==$(this).attr('left-index')) {
+					leftToolOpened = -1;
+					$selectedLeftIcon = undefined;
+					
+					return;
+				}
+				else {
+					if($selectedLeftIcon!=undefined)
+						$selectedLeftIcon.css('color','white');
+				}
+				leftToolOpened = $(this).attr('left-index');
+				
+				leftIndex = layer.open({
+					type: 1,
+					title: 'Edit block',
+					area: ['320px', (windowHeight-29)+'px'],
+					offset: ['-1px', '55px'],
+					closeBtn: 0,
+					anim: 6,
+					shade: 0,
+					id: 'left-panel',
+					move: false,
+					isOutAnim: false,
+					content: $('#divBlockEditing'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响 
+					zIndex: 3000,
+					maxmin: false,
+					success: function(layero, index){
+						$('#divBlockEditing').css('display','block');
+						layer.setTop(layero);
+					},
+					cancel: function(index, layero){ 
+						$('#divBlockEditing').css('display','none');
+					},
+					min: function(layero){ 
+						var top = $(window).height()-72;
+						setTimeout(function() {
+							layero.css({left: '55px', top: top+'px'});
+						},0);
+					}
+				});
+			});
+			
+			$('#btnGroupEditMode').find('button').click(function(){
+				var $buttons = $('#btnGroupEditMode').find('button');
+				
+				for(var i=0; i<$buttons.length; i++) {
+					var $btn = $($buttons[i]);
+					
+					if($btn.hasClass('btn-primary')) {
+						$btn.removeClass('btn-primary');
+						$btn.addClass('btn-secondary');
+						break;
+					}
+				}
+				$(this).removeClass('btn-secondary');
+				$(this).addClass('btn-primary');
+			});
+		});
+		
+		$( window ).resize(function() {
+			resizeElement();
+		});
+		
+		function resizeElement() {
+			
+			// Changing height of several components, may conclude into one or something
+			/*$('#upperDiv').height(($(window).height()-35)+'px');
+			$('#leftPanel').height(($(window).height()-35)+'px');
+			$('.sidebar').height(($(window).height()-35)+'px');*/
+		}
+		
+		$('#btnBuffer').click(function() {
+			// threeDGIS.threeDView.pointBufferFlag = true;
+			$('#bufferModal').modal('show');
+		});
+
+		$('#iconSettings').click(function() {
+			$('#settingModal').modal('show');
+		});
+	</script>
+	
+	<!-- Photo montage -->
+	<script>
+		$('#iconPhotoMontage').click(function() {
+			$('#montageModal').modal({
+				backdrop: 'static',
+				keyboard: false
+			});
+		});
+
+		var transpSlider = $('#exMontageTransp').bootstrapSlider({
+			formatter: function(value) {
+				return value + '%';
+			}
+		});
+
+		$('#btnQuitMontage').click(function() {
+			$('#panoContainer').css('display','none');
+			$('#montageScaleBar').css('display','none');
+			$('#divExifInfo').css('display','none');
+		});
+	</script>
+
+	<script src="../iClient/for3D/webgl/examples/js/echarts.min.js"></script>
+	<script type="text/javascript" src="../iClient/for3D/webgl/examples/js/require.min.js" data-main="js/main"></script>
+	<script src="../iClient/forJavaScript/libs/SuperMap.Include.js"></script>
+	
+	<!-- HTML Elements popped up by layer or right click -->
+	<div id="minimap" style="width:100%; height:100%; z-index: 50000; display:none;"></div>
+	<div id="divUserInfo" style="position:absolute;right:40px;top:0px;float:right;padding:0px 10px; background-color:#ffffff; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50);height:30px;line-height:30px">
+		<input type="text" id="username" style="width:100px;border-style: solid; border-width: 0;font:bold 16px Arial, sans-serif" value="3dgis_p" disabled="disabled"/>
+		<br />
+		<input type="text" id="post" style="width:200px;border-style: solid; border-width: 0;font:bold 16px Arial, sans-serif" value="ISLS-3DGIS" disabled="disabled"/>
+		<div id="Links2OtherSysWeb">
+			Hyperlinks
+		</div>
+	</div>
+	<div class="list-group" id="rightSidebarAnalysis">
+		<a href="#" class="list-group-item rightSidebarBtn" id="btnBuffer">Buffer analysis</a>
+		<a href="#" class="list-group-item rightSidebarBtn" id="btnProfile">Cross section (terrain)</a>
+		<a href="#" class="list-group-item rightSidebarBtn" id="btnViewshed">Viewshed</a>
+		<a href="#" class="list-group-item rightSidebarBtn" id="btnSightline">Line of sight</a>
+	</div>
+	<div class="list-group" id="rightSidebarMeasurement">
+		<a href="#" class="list-group-item rightSidebarBtn" id="iconDistanceMeasure">3D distance measurement</a>
+		<a href="#" class="list-group-item rightSidebarBtn" id="iconHeightMeasure">Horizontal/Vertical distance measurement</a>
+		<a href="#" class="list-group-item rightSidebarBtn" id="iconAreaMeasure">Projected area measurement</a>
+	</div>
+	<div id="rightSidebarViewSetting" class="panel panel-default" style="margin-bottom:0px;">
+		<div class="panel-heading">
+			<h4 class="panel-title">View and Navigate</h4>
+		</div>
+		
+		<div class="panel-body" style="padding: 0px !important;">
+			<h5><b>View settings:</b></h5><hr style="margin-top:3px; margin-bottom:5px;" />
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-xs-5" for="selSceneMode">Scene mode:</label>
+					<div class="col-xs-7"> 
+						<select class="form-control" id="selSceneMode" name="selSceneMode">
+							<option value="3D" selected>3D</option>
+							<option value="2D">2D</option>
+						</select>
+					</div>
+				</div>
+			</form>
+			<div id="TwoDViewSetting" style="display:none;">
+				<h5><b>2D View settings:</b></h5><hr style="margin-top:3px; margin-bottom:5px;" />
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label class="control-label col-xs-5" for="selScale">Set map scale:</label>
+						<div class="col-xs-7"> 
+							<select class="form-control" id="selScale" name="selScale">
+								<option value="-1" selected>Select map scale</option>
+								<option value="1000">1:1000</option>
+								<option value="5000">1:5000</option>
+								<option value="20000">1:20000</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="ThreeDViewSetting">
+				<h5><b>3D View settings:</b></h5><hr style="margin-top:3px; margin-bottom:5px;" />
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label class="control-label col-xs-5" for="selNavigationMode">Choose mode:</label>
+						<div class="col-xs-7"> 
+							<select class="form-control" id="selNavigationMode" name="selNavigationMode">
+								<option value="Bird-eye" selected>Bird mode</option>
+								<option value="Human-eye">Walk mode</option>
+								<option value="Photo-montage">360 View</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+			<button class="btn-default" id="btnStreetView" style="display:none;">Enter Google StreetView</button>
+		</div>
+	</div>
+	
+	<div id="flyToTest" style="overflow: auto; max-height:600px; max-width:800px;">
+		<table>
+			<tr>
+				<td style="width:300px;">Easting:</td>
+				<td><input id="txtLng"></input></td>
+			</tr>
+			<tr>
+				<td>Northing:</td>
+				<td><input id="txtLat"></input></td>
+			</tr>
+			<tr>
+				<td>Height:</td>
+				<td><input id="txtHeight"></input></td>
+			</tr>
+			<tr>
+				<td>Head (deg):</td>
+				<td><input id="txtHead"></input></td>
+			</tr>
+			<tr>
+				<td>Tilt (deg):</td>
+				<td><input id="txtTilt"></input></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div id="searchBody" style="text-align:center; overflow:auto; max-height:800px; padding:10px; display:none;">
+		<table class="table table-bordered" id="searchTable"
+			data-toggle="table"
+			data-height="500"
+			data-striped="true"
+			data-detail-view="true"
+			data-show-export="true"
+			data-detail-formatter="ThreeDGIS.getSearchInfo">
+		</table>
+		<!-- <button class="btn btn-default" style="position:absolute; right:5px; bottom:5px;">Export</button> -->
+	</div>
+	
+	<div id="bufferBody" style="text-align:center; overflow:auto; padding:10px; max-height:600px; max-width:800px; display:none;">
+		<form id="bufferForm" class="form-horizontal">
+			<fieldset id="bufferRadioGroup" class="form-group row">
+				<label class="control-label col-xs-3" for="bfrType">Buffer type:</label>
+				<div class="col-xs-5">
+					<select class="form-control col-xs-5" id="bfrType" name="bfrSize">
+						<option value="point">By Point</option>
+						<option value="polyline">By Polyline</option>
+						<option value="polygon">By Polygon</option>
+						<option value="object">By Selected Feature</option>
+					</select>
+				</div>
+			</fieldset>
+			
+			<div class="form-group">
+				<label class="control-label col-xs-3" for="bfrSize">Buffer size (m):</label>
+				<div class="col-xs-5"> 
+					<input type="input" class="form-control" name="bfrSize" id="bfrSize" value="50">
+				</div>
+			</div>
+			
+			<fieldset id="bufferRadioGroup" class="form-group row">
+				<label class="control-label col-xs-3" for="bfrLayer">Search in layer:</label>
+				<div class="col-xs-5">
+					<select class="form-control col-xs-5" id="bfrLayer" name="bfrLayer">
+						<option value="Bldg_HK80">Building Vector</option>
+						<option value="Lot">Lot</option>
+						<option value="Application">Application</option>
+					</select>
+				</div>
+			</fieldset>
+			
+			<button type="button" id="btnBufferSubmit" class="btn btn-primary">Start</button>
+		</form>
+	</div>
+	
+	<div>
+		<ul class="list-group" id="rightClickVector" style="display:none; margin-bottom:0px;">
+			<a class="list-group-item rightClickItem" id="rightClickFlyToLayer">Fly to layer</a>
+			<a class="list-group-item rightClickItem" id="rightClickAttributeTable">Attribute Table</a>
+		</ul>
+	</div>
+	<div>
+		<ul class="list-group" id="rightClickVector2D" style="display:none; margin-bottom:0px;">
+			<a class="list-group-item rightClickItem" id="rightClickUp">Move layer up</a>
+			<a class="list-group-item rightClickItem" id="rightClickDown">Move layer down</a>
+		</ul>
+	</div>
+	
+	<div class="list-group" id="rightSidebarQuickTools">
+		<a href="#" class="list-group-item rightSidebarBtn" id="btnAddModel">Add 3D footprint</a>
+		<a href="#" class="list-group-item rightSidebarBtn" id="btnAnno">Add annotation</a>
+	</div>
+	
+	<div id="divAnno" style="padding: 5px;">
+		<div style="margin-bottom:5px;">
+			Insert label into 3D scene:
+		</div>
+		<input style="margin-bottom:5px;" class="form-control" id="txtLabelOn3D" placeholder="Type label text here">
+		<div style="text-align: right;">
+			<button type="button" id="btnClearBillboard" class="btn btn-default">Clear all billboard</button>
+		</div>
+	</div>
+</body>
+</html>
